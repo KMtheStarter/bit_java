@@ -1,0 +1,58 @@
+데이터 정제는 JVM내에서 하는 것 보다 DB의 인스턴스를 활용하는게 성능면에서 우월.
+
+컬렉션의 종류
+- List: 순서가 있는 데이터의 집합. 중복 허용.
+- Set: 순서가 없는 데이터의 집합. 중복 허용하지 않음.
+- Map: key와 value의 쌍으로 이루어진 데이터 집합. 키는 중복 허용 x, 값은 중복 허용.
+
+cf> xml
+- DOM 방식
+- SAX 방식
+
+OpenCV 카페모듈? - 제공해주는 인공지능 API
+
+collection에 object type은 절대 추천하지 않으며 JDK5부터 제네릭으로 사용한다.
+
+list.add(new Integer(30)); 처럼 넣는게 정석. 30 하면 오토박싱이 일어나며 들어감.
+
+private ArrayList<String> list;
+list = new ArrayList<>();에서 jdk6까지는 list = new ArrayList<String>(); 이 맞음.
+
+파이프로 된 리스트?
+
+다형성: 하나의 객체로 여러개의 객체를 받아들이고 사용.
+
+자바의 스트림
+- 바이트 스트림: 영상, 음악, 이미지 등 / XXInputStream, XXOutputStream
+	네트워크는 패킷 전송이기 때문에 바이트 스트림 사용. 채팅을 하더라도.
+- 캐릭터 스트림: 문자 전용 / XXReader, XXWriter
+
+데이터를 네트워크로 실어 보내는 것 = 직렬화
+네트워크에서 다시 데이터를 재조립 하는 것 = 역직렬화
+serializable 인터페이스는 안이 텅 비어있다.
+instanceof로 serializable이 구현되어 있는지 검사를 할 뿐이다.
+AOP와 연관된 이야기임.
+
+jdk7 버전부터는 파일 스트림을 닫지 않아도 자동으로 닫히게 지원됨.
+try {} catch{} 가 아니라 try() {} 로 하면 finally에 close를 쓰지 않아도 됨.
+
+2차 스트림은 이미지, 연산 처리등을 하는데 사용.
+
+블로킹메서드: input을 받기를 기다리는... 받기 전에 멈춰있는 메서드
+
+스레드: 프로그램의 실행 흐름.
+하나의 프로세스 안에 포함되어 있는 단위. 스레드 하나에 스택 한 개 사용.
+스레드를 위해 싱글톤 디자인을 사용한다.
+스레드에 우선순위는 없다. join을 사용해 강제할 수는 있다.
+
+스레드가 막 돌고 있는 상태 - race condition
+
+run() - 스레드 내부 동작
+start() - 스레드 시작
+await(), notify(), notifyAll() - 동기화관련
+
+lock pool - 동기화를 위하여 필요한 풀
+wait pool - lock pool이 차있어서 못들어가고 있는 스레드들이 들어가는 풀
+
+extends thread - 스레드 자체가 되는 것.
+implements runnable - 스레드가 될 준비가 되어있는 것. 클래스 안에서 오버라이딩 되어 사용됨.
