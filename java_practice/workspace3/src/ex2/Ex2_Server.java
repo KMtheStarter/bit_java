@@ -10,7 +10,7 @@ import java.util.ArrayList;
 // accept(): 클라이언트의 소켓을 생성
 
 // Server class
-// -1 은 다중 사용자를 고려한 개발론
+// *-1 은 다중 사용자를 고려한 개발론
 // 1. ServerSocket을 생성한다.
 // 2. accept()를 호출해서 접속된 Socket을 반환한다.
 // 2-1. 다중 접속자를 처리하기 위해서 ArrayList를 사용한다.

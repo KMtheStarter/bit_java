@@ -5,22 +5,67 @@
  */
 package ex6;
 
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author bit
  */
 public class Homework extends javax.swing.JFrame {
 
-    private int x,y;
+    Color color;
+    private Data d;
+    private int x, y;
     private int rd = 10;
+    private Socket s;
+    private ObjectOutputStream oos;
     /**
      * Creates new form Homework
      */
     public Homework() {
         initComponents();
+        try {
+            // server에 접속!
+            s = new Socket("localhost", 9999);
+            oos = new ObjectOutputStream(s.getOutputStream());
+            d = new Data();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        // 데이터를 받아서 UI에 출력
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try (ObjectInputStream ois = new ObjectInputStream(s.getInputStream())) {
+                            while (true) {
+                                d = (Data) ois.readObject();
+                                if (d.getChatting() != null){
+                                    target.append(d.getChatting() + "\n");
+                                }
+                                color = d.getColor();
+                                x = d.getX();
+                                y = d.getY();
+                                canvas1.repaint();
+                                d.setChatting(null);
+                            }
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Homework.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }).start();
+
     }
 
     /**
@@ -40,18 +85,28 @@ public class Homework extends javax.swing.JFrame {
             }
             @Override
             public void paint(Graphics g) {
+                g.setColor(color);
                 g.fillOval(x, y, rd, rd);
+
                 //g.drawArc(x, y, 100, 100, 0, arcNum);
             }
+
         };
         jPanel2 = new javax.swing.JPanel();
+        redButton = new javax.swing.JButton();
+        blueButton = new javax.swing.JButton();
+        blackButton = new javax.swing.JButton();
+        chatMsg = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        target = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(800, 500));
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 204));
 
-        canvas1.setBackground(new java.awt.Color(255, 204, 204));
+        canvas1.setBackground(new java.awt.Color(255, 255, 255));
         canvas1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 canvas1MouseDragged(evt);
@@ -60,30 +115,97 @@ public class Homework extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(204, 255, 204));
 
+        redButton.setText("빨강");
+        redButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                redButtonActionPerformed(evt);
+            }
+        });
+
+        blueButton.setText("파랑");
+        blueButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                blueButtonActionPerformed(evt);
+            }
+        });
+
+        blackButton.setText("검정");
+        blackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                blackButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 138, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(redButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(blueButton, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                    .addComponent(blackButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(105, 105, 105)
+                .addComponent(redButton)
+                .addGap(78, 78, 78)
+                .addComponent(blueButton)
+                .addGap(78, 78, 78)
+                .addComponent(blackButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        chatMsg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chatMsgActionPerformed(evt);
+            }
+        });
+
+        target.setColumns(20);
+        target.setRows(5);
+        jScrollPane1.setViewportView(target);
+
+        jLabel1.setText("TEXT:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chatMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(chatMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(canvas1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -110,8 +232,41 @@ public class Homework extends javax.swing.JFrame {
         // TODO add your handling code here:
         x = evt.getX();
         y = evt.getY();
+        d.setX(x);
+        d.setY(y);
+        try {
+            oos.writeObject(d);
+        } catch (IOException ex) {
+            Logger.getLogger(Homework.class.getName()).log(Level.SEVERE, null, ex);
+        }
         canvas1.repaint();
     }//GEN-LAST:event_canvas1MouseDragged
+
+    private void chatMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chatMsgActionPerformed
+        // TODO add your handling code here:
+        d.setChatting(chatMsg.getText().trim());
+        try {
+            oos.writeObject(d);
+        } catch (IOException ex) {
+            Logger.getLogger(Homework.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        chatMsg.setText("");
+    }//GEN-LAST:event_chatMsgActionPerformed
+
+    private void redButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redButtonActionPerformed
+        color = Color.RED;
+        d.setColor(color);
+    }//GEN-LAST:event_redButtonActionPerformed
+
+    private void blueButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blueButtonActionPerformed
+        color = Color.BLUE;
+        d.setColor(color);
+    }//GEN-LAST:event_blueButtonActionPerformed
+
+    private void blackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blackButtonActionPerformed
+        color = Color.BLACK;
+        d.setColor(color);
+    }//GEN-LAST:event_blackButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -149,8 +304,15 @@ public class Homework extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton blackButton;
+    private javax.swing.JButton blueButton;
     private java.awt.Canvas canvas1;
+    private javax.swing.JTextField chatMsg;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton redButton;
+    private javax.swing.JTextArea target;
     // End of variables declaration//GEN-END:variables
 }

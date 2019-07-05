@@ -18,9 +18,10 @@ public class DrawCircle extends JFrame{
             }
             @Override
             public void paint(Graphics g) {
-                g.fillOval(x, y, rd, rd);
-                //g.drawArc(x, y, 100, 100, 0, arcNum);
+//                g.fillOval(x, y, rd, rd);
+                g.drawArc(x, y, 100, 100, 0, arcNum);
             }
+            
         };
         add(can);
         can.setBackground(Color.yellow);
