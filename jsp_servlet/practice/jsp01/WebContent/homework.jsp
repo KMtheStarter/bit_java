@@ -28,16 +28,29 @@
 		%>
 		<table>
 		<%
-				for (int i = num - range/2; i < num + range/2; i++){
+				for (int i = 1; i < 10; i++){
 		%>
-		<tr><t
+		<tr>
+		<%
+					for (int j = num - range/2; j < num + range/2 + 1; j++){
+						if (j == num) {
+		%>
+		<td style="background:<%= col %>"><%= j %>*<%= i %> = <%= i*j %><td/>
+		<%
+						} else {
+		%>
+		<td><%= j %>*<%= i %> = <%= i*j %><td/>
+		<%
+						}
+					}
+		%>
+		</tr>
 		<%
 				}
-		%>
-		</table>
-		<%
 			}
 		%>
+		
+		</table>
 	</div>
 </body>
 </html>
