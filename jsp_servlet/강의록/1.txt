@@ -1,0 +1,26 @@
+<!DOCTYPE html> 로 달랑 되어있으면 html5를 의미함.
+
+기본포트 8080은 oracle의 포트와 충돌이 일어남 ㅠ
+그래서 server의 server.xml에서 포트를 변경해주어야 함. 인코딩 설정은 덤.
+
+web browser 설정
+
+<%! %>
+<% %>
+<%= %>
+java 언어. 쓰면 욕먹음.
+
+크기, 모양등은 모두 css에서 처리하고, 태그 속성에는 넣지 말 것.
+
+404에러 - 해당 서버가 없는거.
+
+jsp 내장함수
+- request(요청) -> HttpServletRequest
+- response(응답) -> HttpServletResponse
+
+copy selector
+body > table > tbody > tr:nth-child(1) > td:nth-child(1)
+body > table > tbody > tr:nth-child(2) > td:nth-child(1)
+body > table > tbody > tr:nth-child(3) > td:nth-child(1)
+에 css를 줘야 한다면, table > tbody > td:nth-child(1) 에 주면 됨.
+
