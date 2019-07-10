@@ -1,0 +1,60 @@
+jar와 war
+- jar: java application.
+- war: servlet context 접근을 위해 관련된 파일을 패키지화.
+war 파일에 포함된 웹 응용 프로그램의 구조는 웹에 정의됨.
+어떤 url이 어떤 서블릿과 연결되어 있는지를 설명하는 web.xml(배포 지시자). container를 해석.
+
+tomcat: container. java의 부모클래스처럼.
+server(WAS - web application service)
+
+deploy: class 파일을 가져와 container에 담는 것.
+
+servlet의 아키텍처. spring이 이걸 기반으로 container를 만든다.
+1. client가 request - 배포 지시자(web.xml)에 servlet이 존재하는지 확인. 없으면? 404에러.
+2. HTTPServletRequest, HTTPServletResponse 가지고 있다.
+3-1. 1번 servlet 생성.
+3-2. init() 호출(servlet 초기화. 객체 생성이 완료된 후 생성된 그 환경에서 초기화 할 것들 초기화)
+3-3. service()호출, 2번 항목들을 injection 받음.
+3-4. service를 thread에서 관리. service는 method를 관리(get, post)
+4. doGet() / doPost()를 호출해서 2번 항목들을 injection. stream 사용.
+5. service() 지속.
+6. WAS를 종료하거나 undeploy 할 때 destroy()를 호출하여 자원 해제. tomcat이 끝날 때 이다.
+jsp는 지시자이고, servlet으로 변환되어 위와 같이 동작.
+
+이동방식  - requestContext 사용
+- redirect: 1 페이지에서 req발생, res.redirect 후 2 페이지로 이동, req. -> url변경, request 2번 발생, requestScope 초기화. response 이용.
+- forward: 1 페이지에서 2페이지의 내용을 불러와 1 페이지에 띄움. -> url유지, request 1번 발생, requestScope 초기화 되지 않음. request 이용.
+
+
+ScopeObject - 데이터를 저장할 수 있는 영역의 종류. setter / getter 사용하여 control.
+- pageContext = servletConfig: 1번 servlet 내에서만 사용할 수 있는 메모리 공간. private라고 생각.
+- requestContext: 1번 servlet과 2번 servlet에서 사용할 수 있는 메모리 공간. default라고 생각(해당 패키지 내에서만 사용 가능).
+- sessionContext: 세션을 가진 servlet에서 사용할 수 있는 메모리 공간. 특정시킬 수 있음.
+- servletContext: public이라고 생각. spring에선 applicationContext라고 이름이 바뀜.
+
+Servlet - Controller를 프로그래밍 하기 위해서만 사용. View를 위해 쓰지 않음. View와 연결해주는 것!
+
+servlet 3.0부터는 web.xml에 servlet 설정(정의, 매핑)을 쓰지 않아도 @WebServlet("/Ex1Hello")로 간편하게 정의할 수 있음.
+
+Spring MVC만 배우면 Spring boot도 해보기.
+
+Connection Pool - connection을 관리하기 위한 공간. connection을 다수의 사용자에게 나누어주기 위한 공간. WAS에 있다.
+tomcat의 library를 추가해주면 됨.
+DataSource 클래스를 통해서 Connection에 접근. context.xml을 오버라이딩, Resource로 설정하고, name attribute로 호출한다.
+- DBCD
+- JNDI(Java Naming and Directory Interface): naming interface. 이름의 키 값을 찾아오는 방식.
+
+META-INF, WEB-INF는 웹에서 direct로 접근이 안 될 뿐이지, 접근 가능하다.
+원래는 jsp파일들도 저 안에 넣어서 관리해야 함.
+
+기존의 자바 수업에서 사용했던 Sawon테이블 select 한 내용을 web에서 동일하게 적용
+
+연습문제) 회원가입을 위한 테이블 설계
+* 회원 테이블, 회원의 마일리지 테이블
+<기능> 회원 한 명이 가입할 때 마일리지가 기본으로 100원 쥐어짐.
+* 오늘 구현한 로그인 프로그램을 통해 회원 테이블과 연동.
+
+<산출물>ERD, class diagram, source
+회원(회원번호, 아이디, 비밀번호, 이름, 가입날짜)
+
+objectaid.com 에서 code to diagram tool 제공
