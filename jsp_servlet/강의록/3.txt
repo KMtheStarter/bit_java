@@ -1,0 +1,75 @@
+Model 1 - resource 관리를 위해 JSP, DAO와 DTO를 따로 설계한 것.
+
+지향
+1. Servlet -> UI처리 x
+2. JSP -> View. EL/JSTL/SPEL 사용
+
+DAO 옆구리에 MyBatis, Spring JDBC Template등을 사용. 지금까지 JDBC를 쓴거고.
+저 솔루션들은 JDBC의 90~98%의 코드를 줄여좀.
+
+iBatis (apache) -> myBatis (google) 인수
+
+
+MyBatis는 다음 세 가지가 같으면 자동으로 매핑해준다. ORM - Object Relation Mapping 객체 관계 매핑
+1. form 태그 안의 요소들의 name = parameter
+2. DTO 안의 setter/getter = property
+3. 컬럼의 이름
+
+1:n의 관계에서 조인의 결과는 테이블 당 DTO가 여러개 생김.
+그럴 때 결과를 조회할 수 있는 자료형으로 ResultMap을 제공해줌.
+
+기존 JDBC에서 ResultSet을 반환하고, 해당 rs를 새로운 arraylist에 넣는 작업을 MyBatis안에 내장하고 있음.
+따라서 프로세스가 바뀌는 것이 아니라, 코드의 양이 줄어들 뿐.
+
+MyBatis 환경설정 파일 - config.xml 구성
+- Connection: context.xml의 역할. db 연결 정보
+- TransactionManager
+- Mappers(resource): Mapper.xml에 작성하는 SQL문들을 가리킴. id라는 속성을 사용해서 매핑을 진행.
+	select에 대한 결과는 resultType을 제공, 쿼리내 변수나 기타 변수에 대해 paramType을 제공.
+
+사용방법
+1. config.xml 읽기 - 텍스트니까 Reader로 읽자.
+2. SQLSessionFactory - SQLSession 제공받음
+3. selectList, selectOne 등으로 매핑된 id에 접근하여 SQL 사용.
+
+메이븐 프로젝트 설정파일
+C:\Users\bit\.m2\repository
+
+python 써봐야 하는 모듈
+pandas, numpy, 싸이파이?, 파이토치, 텐서플로우
+openCV안의 머신러닝 api, cafe모듈.
+
+reflexer - jsp에서 dto에 사용자에게 받은 value를 자동으로 세팅해 주는 기능.
+
+window.onload // 자바스크립트. 모든 리소스를 대기. html 코드를 대기
+$(document).ready // jQuery. 현재 브라우저가 DOM만을 대기. 전부 로딩되기를 대기
+$(~): 선택자
+#id: 한 페이지에서 유일
+.class: 한 페이지에서 중복 가능
+elecent: 태그요소.
+
+ajax 통신 - 비동기 js 및 XML.
+동기식: 요청을 하면 응답이 올 때 까지 기다려야 함.
+비동기식: 요청에 대한 응답이 콜백에 저장되어 기다리지 않아도 됨.
+
+javascript의 ajax통신
+function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "ajax_info.txt", true);
+  xhttp.send();
+}
+
+jquery의 ajax 통신
+$.ajax({
+	// 비동기식으로 보낼 서버의 주소와 값
+	url: "myvalid.jsp?id="+$('#id').val(),
+	// 응답이 성공했을 때 callback 함수로 데이터를 받는다.
+	success: function(data){
+	console.log(data);
+	}
+});

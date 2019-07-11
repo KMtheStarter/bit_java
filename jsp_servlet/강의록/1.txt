@@ -5,8 +5,8 @@
 
 web browser 설정
 
-<%! %>
-<% %>
+<%! %> 안쓴다. 있다는것만 알아두기.
+<% %> service, local 영역. req, res.
 <%= %>
 java 언어. 쓰면 욕먹음.
 
