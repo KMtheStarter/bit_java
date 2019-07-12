@@ -15,3 +15,5 @@ JSTL
 
 JSTL엔 if-else 없음.
 대신 choose - when - otherwise 사용 (switch - case - default와 동일)
+
+컨트롤러는 한 개여야함. 다형성을 활용.
