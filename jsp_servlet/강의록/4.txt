@@ -1,0 +1,17 @@
+Model1 - a.jsp[View + Model] -> 유지보수
+Model2 - view / model 분리.
+model에서 생성된 값을 view로 제공하려면 EL이나 JSTL을 사용.
+
+EL(Expression Language): Model의 값을 View에서 표현하기 위한 언어.
+형식: ${FirstThing.secondThing}
+${singerList[0]} - 배열
+${customerList[0].name} - 객체배열
+
+<%%> 쓰지말기.
+
+JSTL
+라이브러리 추가 후,
+<%@taglib prefix="c" uri="~/core"%>
+
+JSTL엔 if-else 없음.
+대신 choose - when - otherwise 사용 (switch - case - default와 동일)

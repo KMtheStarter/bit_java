@@ -1,3 +1,5 @@
+0. create table 및 DTO 생성
+
 1. maven 프로젝트로 convert하고, maven repository에서 mybatis 다운로드 링크를 copy, pom.xml 파일의 </build>밑에 넣고 설치.
 
 2. oracle과 연결하기 위한 설정파일 context.xml을 META-INF에 넣어준다.
@@ -63,4 +65,6 @@
 5. service 패키지에 SqlSession을 얻기 위한 FactoryService를 작성. 싱글톤 처리 할 것.
 Reader로 config/config.xml 파일을 읽어 factory를 반환한다.
 
-6. DTO, DAO 작성. DAO는 싱글톤 처리 할 것.
+6. DAO 작성. 싱글톤 처리 할 것.
+
+7. 모델처리 (jsp)

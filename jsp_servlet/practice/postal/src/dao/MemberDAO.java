@@ -36,6 +36,7 @@ public class MemberDAO implements MemberInter{
 	public List<MemberDTO> listMember() {
 		SqlSession ss = FactoryService.getFactory().openSession();
 		List<MemberDTO> list = ss.selectList("member.list");
+		ss.close();
 		return list;
 	}
 
@@ -43,6 +44,7 @@ public class MemberDAO implements MemberInter{
 	public MemberDTO searchMember(String name) {
 		SqlSession ss = FactoryService.getFactory().openSession();
 		MemberDTO dto = ss.selectOne("member.search", name);
+		ss.close();
 		return dto;
 	}
 
