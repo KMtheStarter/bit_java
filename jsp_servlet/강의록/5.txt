@@ -1,0 +1,37 @@
+controller는 view를 forward 해주거나, redirect 해줌.
+
+controller와 interface 사이에 객체간의 관계를 느슨하게 해 줄 Object Factory를 설계.
+1. Action interface 작성 - 모델에 대한 인터페이스
+2. 지난 시간에는 execute()에서 페이지 이름을 String으로 반환하여 forward 방식으로 밖에 사용할 수 없었음.
+하지만 이번시간에는 redirect까지 사용할 수 있도록 설계
+3. ActionForword 클래스 생성
+4. 새로운 Action 작성
+5. cmd 값을 비교할 properties 작성
+6. ActionFactory 작성 (싱글톤)
+7. ControlServlet 작성 - ActionForward의 isMethod()가 참이면 redirect, 거짓이면 forwarding 방식
+
+ObjectFactory? 무엇을 위한 설계인가?
+Controller가 다형성으로 관리하던 모델의 생성과 참조에 대한 책임의 분리를 위해 사용.
+-> 서비스를 담당해야 할 Controller에게 모델의 관리에 대한 책임을 분리시킴으로써, 지속적인 서비스만 담당하도록 설계하는 것이 목적.
+
+코드 예시
+ObjectFactory
+	// 메서드를 정의: 요청에 따른 action을 생성하고 반환
+	Action action = null;
+	
+	if( cmd 값을 비교 ){
+		action = new HelloAction();
+	} else if (){
+	
+	} ...
+
+servlet 3.0에서의 파일업로드에서
+enctype="multipart/form-data" 는 bytestream을 사용하겠다는 말.
+part 라는 객체에 파라미터들이 담아짐.
+java servlet 파일에도 @multipartConfig 라는 어노테이션을 추가해야함.
+
+resultMap
+idArg에는 가장 많이, 빨리 접근하는 컬럼 넣어주기. index를 포함하고 있는 pk면 좋다.
+<result>의 property는 <resultMap>의 type에 저장되는 변수명이고, column은 저장될 alias 혹은 컬럼명이다.
+
+association, collection, constructor를 이용한 고급 쿼리 잘 알아두기. 이걸 써서 개발하는건 스펙임!
